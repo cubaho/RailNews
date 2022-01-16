@@ -1,0 +1,61 @@
+<style>
+    .inner-text-link {
+        padding-left: 1ex;
+    }
+</style>
+<div class="w-50">
+    {foreach $posts as $post}
+
+        <div class="feed mt-md-5">
+            <div class="row">
+                <div class="col-md-6"><h5>{$post->getCategory()}</h5></div>
+                <div class="col-md-6 text-right"><h5>{$post->getRegion()}</h5></div>
+            </div>
+            <div style="text-align: justify;">
+            <p class="row content">
+                {$post->getContent()}
+            </p>
+            </div>
+            <div class="row">
+                <div class="col-md-6"><h6>{$post->getCreatedAt()}</h6></div>
+                <div class="col-md-6 text-right">
+                    <h6>
+                        {foreach $post->getExternalLinks() as $externalLink}
+                            <a href="http://{$externalLink->url}">{$externalLink->label}</a>
+                        {/foreach}
+                    </h6></div>
+            </div>
+        </div>
+
+    {/foreach}
+
+    <nav aria-label="Paging">
+        <ul class="pagination justify-content-end">
+            <li class="page-item {!$paginator->isFirst() ?: 'disabled'}">
+                <a class="page-link" href="{!$paginator->isFirst() ? $links[$paginator->getPage() - 1] : '#'}" aria-disabled="true">Previous</a>
+            </li>
+            {foreach $links as $page => $link}
+                <li class="page-item"><a class="page-link" href="{$link}">{$page}</a></li>
+            {/foreach}
+            <li class="page-item {!$paginator->isLast() ?: 'disabled'}">
+                <a class="page-link" href="{!$paginator->isLast() ? $links[$paginator->getPage() + 1] : '#'}" aria-disabled="true">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<script>
+    window.onload = function() {
+        let contents = document.getElementsByClassName("content");
+        for (content of contents) {
+            let profiles = {$profiles}
+            for (name in profiles) {
+                let text = content.innerHTML;
+                let res = text.replace(name, '<a class="inner-text-link" href=' + profiles[name]+'>' + name + '</a>');
+                content.innerHTML = res;
+            }
+
+
+        }
+    };
+</script>

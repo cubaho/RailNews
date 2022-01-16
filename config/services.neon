@@ -1,0 +1,3 @@
+services:
+	- App\Router\RouterFactory::createRouter
+	- Nette\Database\Connection(%database.dsn%, %database.user%, %database.password%)
